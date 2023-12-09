@@ -1,6 +1,6 @@
 apt update -y
 apt upgrade -y
-apt install ipset iptables
+apt install ipset iptables -y
 
 bash <(curl -Ls https://raw.githubusercontent.com/HamedAp/testblock/main/shahanblock --ipv4)
 
