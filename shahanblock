@@ -369,7 +369,7 @@ func_ipt_deny() {
   if $iptsave | grep -q "match-set.*${proto}-${ctyname}.*LOGIPS"; then
     ipt_i="already exists"
   else
-    $iptables -I INPUT "$rulenum" -p tcp --dport 80 -m set --match-set "${proto}-${ctyname}" src -j LOGIPS && \
+    $iptables -I INPUT "$rulenum" -p tcp  -m set --match-set "${proto}-${ctyname}" src --dport 80 -j LOGIPS && \
       ipt_i="OK" || ipt_i="NOK"
   fi
   # if logips chain does not exist - because logips=0 or previous cmds failed - insert ipset block rule
@@ -379,14 +379,14 @@ func_ipt_deny() {
       if $iptsave | grep -q "match-set.*${proto}-${ctyname}.*REJECT"; then
         ipt_i="already exists"
       else
-        $iptables -I INPUT "$rulenum" -p tcp --dport 80 -m set --match-set "${proto}-${ctyname}" src -j REJECT --reject-with "$rj" && \
+        $iptables -I INPUT "$rulenum" -p tcp  -m set --match-set "${proto}-${ctyname}" src --dport 80 -j REJECT --reject-with "$rj" && \
           ipt_i="OK" || ipt_i="NOK"
       fi
     elif [ "$MODE" = "drop" ]; then
       if $iptsave | grep -q "match-set.*${proto}-${ctyname}.*DROP"; then
         ipt_i="already exists"
       else
-        $iptables -I INPUT "$rulenum" -p tcp --dport 80 -m set --match-set "${proto}-${ctyname}" src -j DROP && \
+        $iptables -I INPUT "$rulenum" -p tcp  -m set --match-set "${proto}-${ctyname}" src --dport 80 -j DROP && \
           ipt_i="OK" || ipt_i="NOK"
       fi
     fi
@@ -400,7 +400,7 @@ func_ipt_allow() {
   if $iptsave | grep -q "match-set.*${proto}-${ctyname}.*LOGIPS"; then
     ipt_i="already exists"
   else
-    $iptables -I INPUT "$rulenum" -p tcp --dport 80 -m set --match-set "${proto}-${ctyname}" src -j LOGIPS && \
+    $iptables -I INPUT "$rulenum" -p tcp -m set --match-set "${proto}-${ctyname}" src --dport 80 -j LOGIPS && \
       ipt_i="OK" || ipt_i="NOK"
   fi
   # if logips chain does not exist - because logips=0 or previous cmds failed - insert ipset block rule
@@ -408,7 +408,7 @@ func_ipt_allow() {
     if $iptsave | grep -q "match-set.*${proto}-${ctyname}.*ACCEPT"; then
       ipt_i="already exists"
     else
-      $iptables -I INPUT "$rulenum" --dport 80 -p tcp -m set --match-set "${proto}-${ctyname}" src -j ACCEPT && \
+      $iptables -I INPUT "$rulenum"  -p tcp -m set --match-set "${proto}-${ctyname}" src --dport 80 -j ACCEPT && \
         ipt_i="OK" || ipt_i="NOK"
     fi
   fi
